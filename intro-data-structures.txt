@@ -1,0 +1,58 @@
+1. A line of people at an amusement park ride.
+
+  a. const line = ['Vivian', 'Ava', 'Josh', 'Patrick', 'Mike']
+  b. line.push('Mary');
+  c. function findPerson(name, lineName) {
+       for(let i = 0; i < lineName.length; i++) {
+         if(lineName[i] === name) {
+           return i;
+         }
+       }
+       return -1;
+     }
+
+     findPerson('Josh', line); // Returns 2
+  d. findPerson('Emily', line); // Returns -1
+  e. line.splice(findPerson('Ava', line), 0, 'Melissa');
+  f. line.splice(findPerson('Patrick', line), 1);
+
+2. Fast-food drive thru. Once you're in line, there are concrete curbs preventing
+   you from leaving the line. I would model this using a Queue data structure.
+   Queues are first-in first-out, and you are no  t able to access the data except
+   to be inserted at the tail and removed from the head.
+
+3. When implementing a drive thru, I would probably create a Queue class to work with:
+
+   class Queue {
+     constructor() {
+       this.queue = [];
+     }
+
+     addItem(name) {
+       return this.queue.unshift(name);
+     }
+
+     removeItem() {
+       return this.queue.pop();
+     }
+
+     getQueueLength() {
+       return this.queue.length;
+     }
+
+     getFirstIn() {
+       return this.queue[this.getQueueLength() - 1];
+     }
+
+     getLastIn() {
+       return this.queue[0];
+     }
+   }
+
+   And would apply it like this:
+
+   const driveThru = new Queue;
+   driveThru.addItem('Customer 1');
+   driveThru.addItem('Customer 2');
+   driveThru.getFirstIn();
+   driveThru.removeItem();
