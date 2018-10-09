@@ -1,0 +1,138 @@
+EXCERCISES
+1. What are some pros and cons of using linked lists instead of arrays?
+  - Items within a linked list are only linked by a reference to the node of the next item, rather than by the next block
+    of memory. This allows a linked list to be much more efficient in terms of memory usage, because the computer only has
+    to find enough memory to store each item in the linked list seperately, rather than needing to find a sequential block
+    of memory to store an entire array.
+
+    For the same reason, linked lists cannot be indexed, and so any action that requires retrieving an element from a linked
+    list means that you will have to iterate through the list from the beginning until you find the element you're searching for.
+    This can potentially be much slower than accessing the data from a specific index of an array.
+
+2. Come up with a real world example of a linked list.
+  - A real world example could be that of a streaming music platform, while implementing the "next" and "previous" functions.
+    If using a linked list - in this case a doubly linked list, so every item in the list has a reference to both the previous
+    item's node and the next item's node - the data for each song can be stored anywhere the server sees fit. If the server has
+    just enough space to fit one song in a particular block of memory, that is no problem. If the server were using a traditional
+    array to store a user's playlist information, it would have to allocate a block of memory large enough to fit the entire
+    playlist, which is not practical. With the linked list implementation, a click of the next or back button would simply fetch
+    the song at the previous or next node in the list.
+
+PROGRAMMING QUESTIONS
+1. Debug the code given.
+  - I made 2 changes to the ELSE portion of the If-Else statement. The pseudocode had you setting something called current to the head if
+    the head exists. I swapped it to set the next property of tail to the created node, then set the tail itself to the node. This means
+    that if there is no head, then I will create a reference to the new node on the current tail, then the new node will become the current
+    tail.
+
+  Repaired Pseudocode:
+
+    FUNCTION push(element)
+      CREATE node
+      SET node.value TO element
+      SET node.next to null
+
+      IF the head node does not exist THEN
+        SET head to node
+        SET tail to node
+      ELSE 
+        SET tail.next to node
+        SET tail to node
+      END IF
+    END FUNCTION
+
+2/3. Remove all duplicates from a linked list/given an unsorted singly linked list, reverse it.
+  - For these challenges I just fully implemented a Node and a LinkedList class. The functionality for both removing all duplicates
+    and for reversing the list are included as the removeAllDuplicates() and reverseList() methods within the LinkedList class.
+
+    class LinkedList {
+      constructor() {
+        this.head = null;
+        this.tail = null;
+      }
+
+      push(value) {
+        let newNode = new Node(value, null);
+        if (!this.head) {
+          this.head = newNode;
+          this.tail = newNode;
+        } else {
+          this.tail.addNextNode(newNode);
+          this.tail = newNode;
+        }
+      }
+
+      deleteNode(value) {
+        if(this.head.value === value) {
+          let deletedValue = this.head;
+          this.head = this.head.next;
+          return deletedValue;
+        }
+
+        let currentNode = this.head;
+
+        while(currentNode) {
+          if(currentNode.next.value === value) {
+            if(currentNode.next !== null && currentNode.next.next !== null) {
+              let deletedValue = currentNode.next.value;
+              currentNode.next = currentNode.next.next;
+              return deletedValue;
+            } else {
+              let deletedValue = currentNode.next.value;
+              currentNode.next = null;
+              this.tail = currentNode;
+              return deletedValue;
+            }
+          } else {
+            currentNode = currentNode.next;
+          }
+        }
+      }
+
+      removeAllDuplicates() {
+        let currentNode = this.head;
+        let valueUsedList = [];
+
+        while(currentNode) {
+          for (let i = 0; i < valueUsedList.length; i++) {
+            if (currentNode.value === valueUsedList[i]) {
+              this.deleteNode(currentNode.value);
+            }
+          }
+          if(!valueUsedList.includes(currentNode.value)) {
+            valueUsedList.push(currentNode.value);
+          }
+          currentNode = currentNode.next;
+        }
+      }
+
+      reverseList() {
+        let currentNode = this.head;
+        let newTail = this.head;
+        let newHead = this.tail;
+        let previous = null;
+
+        while(currentNode) {
+          let save = currentNode.next;
+          currentNode.next = previous;
+          previous = currentNode;
+          currentNode = save;
+        }
+
+        this.head = newHead;
+        this.tail = newTail;
+
+        return previous;
+      }
+    }
+
+    class Node {
+      constructor(value, next) {
+        this.value = value;
+        this.next = next;
+      }
+
+      addNextNode(value) {
+        this.next = value;
+      }
+    }
