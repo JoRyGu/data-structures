@@ -1,0 +1,92 @@
+EXCERCISES
+
+1. What is the main difference between a stack and a queue?
+  - A stack uses LIFO (last in, first out) and a queue uses FIFO (first in, 
+    first out).
+
+2. What are the similarities between stacks and queues?
+  - The major similarity between the two is that only one element at a time is 
+    available to be retrieved (the last item inserted into a stack and the first
+    item inserted into a queue).
+
+3. While implementing UNDO, I would use a stack. As the user completes actions
+   within the word processor, you can add those actions to a stack. When the user
+   clicks UNDO, you can pop the last action entered from the stack, undoing the
+   mistake action.
+
+   While implementing REDO, I might pop the UNDO actions off the top of the stack 
+   and push it on to a REDO stack. As I continue to click UNDO, the REDO stack would 
+   grow. When a user clicks REDO, I would pop the action from the UNDO stack and 
+   push it back on to the REDO stack.
+
+PROGRAMMING QUESTIONS
+
+1. Given a string, reverse it using a stack.
+  
+  const myString = 'Hello world!';
+  const originalStack = [...myString];
+  let reverseString = '';
+
+  for(let i = 0; i < myString.length; i++) {
+    reverseString += originalStack.pop();
+  }
+
+2/3. Implement the pop method of a stack using one queue/implement the enqueue and dequeue methods within your own Queue class.
+  - Neither the Queue class nor the Stack class is fully implemented - I fleshed them both out enough to answer the question with some context. 
+    Queue is mostly implemented with JavaScript array methods, where as the Stack class is 100% implemented within the confines of the Queue I 
+    created.
+
+    class Queue {
+      constructor() {
+        this.queue = [];
+      }
+
+      enqueue(element) {
+        this.queue.push(element);
+        return this.queue.length;
+      }
+
+      dequeue() {
+        return this.queue.shift();
+      }
+
+      getQueue() {
+        return this.queue;
+      }
+
+      getItemAtIndex(index) {
+        return this.queue[index];
+      }
+
+      getLength() {
+        return this.queue.length;
+      }
+    }
+
+    class Stack {
+      constructor() {
+        this.stack = new Queue;
+      }
+
+      push(element) {
+        return this.stack.enqueue(element);
+      }
+
+      pop() {
+        const newStack = new Queue;
+        const returnItem = this.stack.getItemAtIndex(this.stack.getLength() - 1);
+        console.log(returnItem);
+
+        for(let i = 0; i < this.stack.getLength() - 1; i++) {
+          newStack.enqueue(this.stack.getItemAtIndex(i));
+        }
+        this.stack = newStack;
+        return returnItem;
+      }
+
+      getStack() {
+        return this.stack.getQueue();
+      }
+    }
+
+3. 
