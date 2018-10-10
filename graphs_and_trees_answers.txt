@@ -1,0 +1,169 @@
+EXERCISES 
+1. What is a binary tree and what makes it unique to other trees?
+  - A binary tree is a data structure that consists of a root element, and ONLY left and right child elements. These children elements also
+    only have a left and right child element. When populating the tree, if the value is lower, it is placed inot the left node, if the value
+    is greater it is placed in the right node. This allows it to be searched very efficiently. Other trees also consist of a root with child
+    nodes, but the child nodes are not limited to 2, and the data isn't organized by value necessarily. 
+
+2. What is a heuristic?
+  - Heuristics are data scientists best guesses when it comes to solving a complex problem. If the problem does not have a solution that can 
+    be achieved 100% of the time, we make our best guess at what parameters will correctly solve the problem while accepting a success rate 
+    below 100%. 
+
+3. What is another problem besides the shortest path problem that requires the use of heuristics?
+  - An example of heuristics that I use on a daily basis in my current job is using "rules of thumb." "Rule of thumb says that we
+    should complete this task by Wednesday in order to complete this project by end of day Friday." It's not a hard and fast rule that is set 
+    in stone, but it's correct in the majority of situations so it's generally accepted as a good rule.
+
+4. What is the difference between depth-first search and breadth-first search?
+  - Depth first search searches a tree from the root and down a specific path until no more child nodes on that path exist. It then backtracks
+    and explores the next path. Breadth first searches search one layer of the tree at a time, starting at the root of the tree. Once the search
+    has explored a full layer, it moves down and searches the next layer.
+
+5. Explain in your own words what an undirected, a-cyclic, unweighted graph is.
+  - An undirected, a-cyclic, unweighted graph is a data structure that does not have a directed flow. Nodes are connected in both directions. The
+    graph is a-cyclic, which means it does not form a closed loop. A search through this structure will eventually hit a dead end. Because it is
+    unweighted, there is no weight placed on connections between nodes for the cost of traveling from one to the next. An example of this node might
+    be a dually-linked list or a tree would be an example of this type of graph.
+
+6. What kind of graph is a binary-search tree?
+  - An undirected, a-cyclic, unweighted graph.
+
+PROGRAMMING QUESTIONS
+
+1. Given a a Binary Search Tree and a value, write a function that checks to see whether the value exists within the tree.
+  - In order to find the value, I would write a function that checks the value of the root node. If the value of the root node is greater than
+    the search value, I would traverse the tree to the left child node. If the opposite, I would traverse to the right child node. I would continue
+    this pattern until I either find the value or reach a dead end. In the case of the latter I would return the relevant information that makes it
+    clear that the value was not found. Full implementation of a binary tree below will implement the code requested - it is the valueExists() method.
+
+2. Given a Binary Search Tree and two nodes, write a function that finds the distance between the two nodes.
+  - In order to find the distance between two nodes I would first find the distance between each of them and the root. By adding the distance from the
+    distance from the root for each of them you find the distance between the two of them. This is implemented in the full class implementation in the
+    distanceBetween() method.
+
+FULL BST IMPLEMENTATION
+
+class BinarySearchTree {
+  constructor(root) {
+    this.root = new BinaryNode(root);
+  }
+
+  insert(value) {
+    let currentNode = this.root;
+    while(true) {
+      if(value > currentNode.getValue()) {
+        if(currentNode.getRightChild() === null) {
+          currentNode.setRightChild(value);
+          currentNode.getRightChild().setParent(currentNode);
+          return;
+        } else {
+          currentNode = currentNode.getRightChild();
+        }
+      } else if(value === currentNode.getValue()) {
+        console.log(value, 'is equal to currentNode\'s value of', currentNode.getValue());
+        return;
+      } else {
+        if(currentNode.getLeftChild() === null) {
+          currentNode.setLeftChild(value);
+          currentNode.getLeftChild().setParent(currentNode);
+          return;
+        } else {
+          currentNode = currentNode.getLeftChild();
+        }
+      }
+    }
+  }
+
+  valueExists(value) {
+    let currentNode = this.root;
+    while(currentNode) {
+      if(value === currentNode.getValue()) {
+        return true;
+      }
+
+      if(value > currentNode.getValue()) {
+        currentNode = currentNode.getRightChild();
+      }
+
+      if(value < currentNode.getValue()) {
+        currentNode = currentNode.getLeftChild();
+      }
+    }
+    return false;
+  }
+
+  distanceBetween(val1, val2) {
+
+    function distanceFromRoot(val) {
+      let distance = 0;
+      let currentNode = this.root;
+      while(true) {
+        if(val === currentNode.getValue()) {
+          return distance;
+        }
+
+        if(val > currentNode.getValue()) {
+          currentNode = currentNode.getRightChild();
+          distance++;
+        }
+
+        if(val < currentNode.getValue()) {
+          currentNode = currentNode.getLeftChild();
+          distance++;
+        }
+      }
+    }
+    distanceFromRoot = distanceFromRoot.bind(this);
+
+    return distanceFromRoot(val1) + distanceFromRoot(val2);
+  }
+
+  getRoot() {
+    return this.root;
+  }
+}
+
+class BinaryNode {
+  constructor(value) {
+    this.rightChild = null;
+    this.leftChild = null;
+    this.parent = null;
+    this.value = value;
+  }
+
+  getValue() {
+    return this.value;
+  }
+
+  getRightChild() {
+    return this.rightChild;
+  }
+
+  getLeftChild() {
+    return this.leftChild;
+  }
+
+  setRightChild(value) {
+    this.rightChild = new BinaryNode(value);
+  }
+
+  setLeftChild(value) {
+    this.leftChild = new BinaryNode(value);
+  }
+
+  setParent(existingNode) {
+    this.parent = existingNode;
+  }
+}
+
+const bst = new BinarySearchTree(8);
+bst.insert(3);
+bst.insert(1);
+bst.insert(6);
+bst.insert(4);
+bst.insert(7);
+bst.insert(10);
+bst.insert(14);
+bst.insert(13);
+bst.distanceBetween(4, 10);
